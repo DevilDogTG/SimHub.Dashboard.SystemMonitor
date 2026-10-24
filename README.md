@@ -2,6 +2,13 @@
 
 A 1280x720 SimHub dashboard showing CPU, GPU, RAM, VRAM and FPS.
 
+## Requirements
+
+- HWiNFO64 with Shared Memory Support enabled
+- The [DevDogs System Info](https://github.com/DevilDogTG/SimHub.Plugins.SystemInfo) SimHub plugin (`DDSystemInfoPlugin.*` properties).
+  Every binding uses its hardware-agnostic names, so the dashboard works on any PC the plugin supports. Values show `-`
+  while HWiNFO isn't running.
+
 ## Layout
 
 | Path | What it is |
