@@ -46,4 +46,30 @@ git config diff.djson.textconv "PYTHONUTF8=1 python -m json.tool --no-ensure-asc
 
 ## Releasing
 
-Export the dashboard from SimHub's Dash Studio and attach the `.simhubdash` to a GitHub release.
+Every PR that bumps `DashboardVersion` is released once it merges. PRs without a bump are not released.
+
+`DashboardVersion` (set in Dash Studio's dashboard properties) is `X.Y.Z`, bumped in the PR that makes the change:
+
+| Bump | When |
+|---|---|
+| X | A deliberate major release, decided by the maintainer |
+| Y (Z resets to 0) | A new feature, or a dependency update: SimHub, the DevDogs System Info plugin, or another plugin |
+| Z | A fix to something that already exists |
+| None | Hidden layers, refactors with no visible change, repo tooling |
+
+A `.simhubdash` is a zip of the `System Monitor/` folder, so build it from the merged commit rather than exporting it
+from Dash Studio. It then holds exactly the files tracked under `src/` (SimHub's `_Backups/` is git-ignored):
+
+```powershell
+git archive --format=zip -9 -o "System.Monitor.v<version>.simhubdash" <commit>:src
+```
+
+Tag that commit and publish the release with the file attached:
+
+```powershell
+git tag -a v<version> <commit> -m "release: v<version>"
+git push origin v<version>
+gh release create v<version> --title "v<version>" --notes-file <notes.md> --verify-tag "System.Monitor.v<version>.simhubdash"
+```
+
+The release notes state the SimHub version the dashboard was saved with and the minimum DevDogs System Info plugin version.
